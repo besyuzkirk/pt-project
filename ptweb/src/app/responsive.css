@@ -13,21 +13,77 @@
   }
 }
 
-/* Tablet (max-width: 1024px) adjustments */
+/* Tablet & Mobile (max-width: 1024px) adjustments */
 @media (max-width: 1024px) {
   .sidebar-fixed {
-    position: static;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    height: 72px;
     width: 100%;
-    height: auto;
     flex-direction: row;
-    overflow-y: visible;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(226, 232, 240, 0.8);
     border-right: none;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: none;
+    z-index: 999;
+    padding: 0 16px;
+    padding-bottom: env(safe-area-inset-bottom);
+    box-shadow: 0 -4px 30px rgba(0,0,0,0.03);
   }
+
+  .sidebar-fixed > div {
+    display: none !important; /* Hide logo, role badges, etc. */
+  }
+
+  .sidebar-fixed nav {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-around;
+    width: 100%;
+    padding: 0 !important;
+    overflow-y: hidden !important;
+    gap: 4px;
+  }
+
+  .sidebar-fixed nav > div {
+    margin-bottom: 0 !important;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .sidebar-fixed nav > div > div:first-child {
+    display: none !important; /* Hide category title headers */
+  }
+
+  .nav-menu-item {
+    flex-direction: column !important;
+    gap: 4px !important;
+    font-size: 10px !important;
+    font-weight: 800;
+    padding: 8px 10px !important;
+    border-radius: 12px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .nav-menu-item svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
   .main-scrollable {
     margin-left: 0;
     width: 100%;
+    padding-bottom: 96px; /* Ensure content is not cut off by bottom nav */
   }
+
   .stat-box-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -44,12 +100,21 @@
   .stat-box-grid {
     grid-template-columns: 1fr;
   }
-  .nav-menu-item {
-    padding: 8px 12px;
-    font-size: 13px;
-  }
   .btn-action-primary {
     padding: 10px 20px;
     font-size: 13px;
+  }
+}
+
+/* Standalone PWA-only enhancements */
+@media all and (display-mode: standalone) {
+  body {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .header-fixed {
+    padding-top: env(safe-area-inset-top);
+    height: calc(70px + env(safe-area-inset-top));
   }
 }
