@@ -2,40 +2,41 @@
 
 /* Mobile‑first defaults are already handled by globals.css */
 
-/* Tablet and up (min-width: 640px) */
-@media (min-width: 640px) {
+/* Desktop and up (min-width: 1025px) */
+@media (min-width: 1025px) {
   .sidebar-fixed {
-    width: 240px;
+    width: 280px !important;
   }
   .main-scrollable {
-    margin-left: 240px;
-    width: calc(100vw - 240px);
+    margin-left: 280px !important;
+    width: calc(100vw - 280px) !important;
   }
 }
 
 /* Tablet & Mobile (max-width: 1024px) adjustments */
 @media (max-width: 1024px) {
   .sidebar-fixed {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: auto;
-    height: 72px;
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(226, 232, 240, 0.8);
-    border-right: none;
-    border-bottom: none;
-    z-index: 999;
-    padding: 0 16px;
-    padding-bottom: env(safe-area-inset-bottom);
-    box-shadow: 0 -4px 30px rgba(0,0,0,0.03);
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    height: 72px !important;
+    width: 100% !important;
+    flex-direction: row !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-top: 1px solid rgba(226, 232, 240, 0.8) !important;
+    border-right: none !important;
+    border-bottom: none !important;
+    z-index: 999 !important;
+    padding: 0 16px !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
+    box-shadow: 0 -4px 30px rgba(0,0,0,0.06) !important;
+    display: flex !important;
   }
 
   .sidebar-fixed > div {
@@ -45,17 +46,17 @@
   .sidebar-fixed nav {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: space-around;
-    width: 100%;
+    justify-content: space-around !important;
+    width: 100% !important;
     padding: 0 !important;
     overflow-y: hidden !important;
-    gap: 4px;
+    gap: 4px !important;
   }
 
   .sidebar-fixed nav > div {
     margin-bottom: 0 !important;
-    display: flex;
-    flex-direction: row;
+    display: flex !important;
+    flex-direction: row !important;
   }
 
   .sidebar-fixed nav > div > div:first-child {
@@ -66,11 +67,12 @@
     flex-direction: column !important;
     gap: 4px !important;
     font-size: 10px !important;
-    font-weight: 800;
-    padding: 8px 10px !important;
-    border-radius: 12px;
-    justify-content: center;
-    align-items: center;
+    font-weight: 800 !important;
+    padding: 6px 10px !important;
+    border-radius: 12px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 !important;
   }
 
   .nav-menu-item svg {
@@ -79,42 +81,104 @@
   }
 
   .main-scrollable {
-    margin-left: 0;
-    width: 100%;
-    padding-bottom: 96px; /* Ensure content is not cut off by bottom nav */
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding-bottom: 96px !important; /* Ensure content is not cut off by bottom nav */
+  }
+
+  .page-container {
+    padding: 16px !important;
+  }
+
+  .header-fixed {
+    padding: 0 16px !important;
+    height: 64px !important;
   }
 
   .stat-box-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    margin-bottom: 24px !important;
   }
 }
 
-/* Mobile (max-width: 640px) adjustments */
+/* Mobile Specific (max-width: 640px) adjustments */
 @media (max-width: 640px) {
   .header-fixed {
-    padding: 0 1rem;
+    padding: 0 12px !important;
+    height: 60px !important;
   }
+
   .header-search-bar {
-    width: 100%;
+    width: 100% !important;
+    max-width: 180px !important;
   }
+
   .stat-box-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
   }
+
   .btn-action-primary {
-    padding: 10px 20px;
-    font-size: 13px;
+    padding: 8px 16px !important;
+    font-size: 12px !important;
+  }
+
+  /* Adjust table layouts for tiny mobile screens */
+  table, thead, tbody, th, td, tr {
+    display: block !important;
+  }
+
+  thead tr {
+    position: absolute !important;
+    top: -9999px !important;
+    left: -9999px !important;
+  }
+
+  tr {
+    background: white !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 14px !important;
+    padding: 16px !important;
+    margin-bottom: 16px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02) !important;
+  }
+
+  td {
+    border: none !important;
+    padding: 8px 0 !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    text-align: right !important;
+  }
+
+  td::before {
+    content: attr(data-label) !important;
+    font-weight: 800 !important;
+    color: #94a3b8 !important;
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    text-align: left !important;
+  }
+
+  td > a, td > div {
+    text-align: right !important;
+    justify-content: flex-end !important;
   }
 }
 
 /* Standalone PWA-only enhancements */
 @media all and (display-mode: standalone) {
   body {
-    -webkit-user-select: none;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-tap-highlight-color: transparent !important;
   }
   .header-fixed {
-    padding-top: env(safe-area-inset-top);
-    height: calc(70px + env(safe-area-inset-top));
+    padding-top: env(safe-area-inset-top) !important;
+    height: calc(64px + env(safe-area-inset-top)) !important;
   }
 }

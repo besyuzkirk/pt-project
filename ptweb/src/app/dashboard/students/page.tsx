@@ -265,7 +265,7 @@ export default function StudentsPage() {
             <tbody>
               {filtered.map((student, idx) => (
                 <tr key={student.id} style={{ borderBottom: idx < filtered.length - 1 ? "1px solid #f8fafc" : "none" }}>
-                  <td style={{ padding: "20px 24px" }}>
+                  <td data-label="Danışan" style={{ padding: "20px 24px" }}>
                       <Link href={`/dashboard/students/${student.id}`} style={{ display: "flex", alignItems: "center", gap: "14px", textDecoration: "none" }}>
                         <div style={{ width: "44px", height: "44px", background: "#eff6ff", color: "#4f46e5", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: "14px" }}>
                           {getInitials(student.firstName, student.lastName)}
@@ -276,13 +276,13 @@ export default function StudentsPage() {
                         </div>
                       </Link>
                   </td>
-                  <td style={{ padding: "20px 24px" }}>
+                  <td data-label="Telefon" style={{ padding: "20px 24px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                       <Phone size={14} color="#94a3b8" />
                       <span style={{ fontSize: "14px", fontWeight: 600, color: "#475569" }}>{student.phoneNumber || "—"}</span>
                     </div>
                   </td>
-                  <td style={{ padding: "20px 24px" }}>
+                  <td data-label="Aktif Paket" style={{ padding: "20px 24px" }}>
                     {student.activePackageName ? (
                       <div>
                         <div style={{ fontSize: "14px", fontWeight: 700, color: "#0f172a" }}>
@@ -296,13 +296,13 @@ export default function StudentsPage() {
                       <span style={{ fontSize: "13px", fontWeight: 600, color: "#94a3b8" }}>Paket Atanmamış</span>
                     )}
                   </td>
-                  <td style={{ padding: "20px 24px" }}>
+                  <td data-label="Kayıt Tarihi" style={{ padding: "20px 24px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                       <Calendar size={14} color="#94a3b8" />
                       <span style={{ fontSize: "14px", fontWeight: 600, color: "#475569" }}>{formatDate(student.createdAt)}</span>
                     </div>
                   </td>
-                  <td style={{ padding: "20px 24px" }}>
+                  <td data-label="Durum" style={{ padding: "20px 24px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                       {student.isActive ? (
                         <>
@@ -317,7 +317,7 @@ export default function StudentsPage() {
                       )}
                     </div>
                   </td>
-                  <td style={{ padding: "20px 24px", textAlign: "right" }}>
+                  <td data-label="İşlem" style={{ padding: "20px 24px", textAlign: "right" }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "8px" }}>
                       
                       <Link href={`/dashboard/students/${student.id}/measurements/new`} title="Ölçüm Ekle">
