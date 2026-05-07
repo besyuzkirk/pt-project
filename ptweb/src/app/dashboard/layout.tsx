@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   LayoutDashboard, Users, UserPlus, UserCog, Package,
-  Calendar, Bell, Settings, LogOut, Search, ChevronDown, Menu, X
+  Calendar, Bell, Settings, LogOut, Search, ChevronDown, Menu, X, QrCode, Scan
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -233,6 +233,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
             
             <div className="mobile-sheet-grid">
+              <Link href="/dashboard/qr-scanner" onClick={() => setIsMobileMenuOpen(false)} className="mobile-grid-item">
+                <div className="item-icon-bg purple" style={{ background: "#7c3aed" }}><Scan size={20} color="white" /></div>
+                <span style={{ fontWeight: 800, color: "#7c3aed" }}>Check-in (Tara)</span>
+              </Link>
               <Link href="/dashboard/register-student" onClick={() => setIsMobileMenuOpen(false)} className="mobile-grid-item">
                 <div className="item-icon-bg purple"><UserPlus size={20} /></div>
                 <span>Danışan Ekle</span>

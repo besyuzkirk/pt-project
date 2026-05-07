@@ -47,6 +47,26 @@ public class AppointmentsController : ControllerBase
         await _mediator.Send(command);
         return NoContent();
     }
+
+    [HttpPost("check-in")]
+    public async Task<ActionResult<CheckInResultDto>> CheckIn([FromBody] CheckInRequest request)
+    {
+        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        Guid? trainerId = null;
+        if (!string.IsNullOrEmpty(userIdString) && Guid.TryParse(userIdString, out var parsedId))
+        {
+            trainerId = parsedId;
+        }
+
+        var command = new CheckInAppointmentCommand(request.StudentId, trainerId);
+        var result = await _mediator.Send(command);
+        return Ok(result);
+    }
+}
+
+public class CheckInRequest
+{
+    public Guid StudentId { get; set; }
 }
 
 public class UpdateAppointmentRequest

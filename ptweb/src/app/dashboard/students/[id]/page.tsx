@@ -5,10 +5,11 @@ import { useParams } from "next/navigation";
 import { 
   User, Phone, Mail, Calendar, Ruler, Info, 
   Package, CheckCircle, XCircle, Clock, 
-  ChevronRight, ArrowLeft, Loader2, Plus, X, Image as ImageIcon
+  ChevronRight, ArrowLeft, Loader2, Plus, X, Image as ImageIcon, QrCode
 } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
+import { QRCodeSVG } from "qrcode.react";
 
 const API_BASE = "http://localhost:5064/api";
 
@@ -90,6 +91,7 @@ export default function StudentDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedMeasurement, setSelectedMeasurement] = useState<Measurement | null>(null);
+  const [showQrModal, setShowQrModal] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -183,6 +185,10 @@ export default function StudentDetailPage() {
               Ölçü Gir
             </button>
           </Link>
+          <button className="btn-action-primary" style={{ background: "#8b5cf6" }} onMouseOver={(e) => e.currentTarget.style.background = "#7c3aed"} onMouseOut={(e) => e.currentTarget.style.background = "#8b5cf6"} onClick={() => setShowQrModal(true)}>
+            <QrCode size={18} />
+            Check-in Kartı
+          </button>
         </div>
       </div>
 
@@ -540,10 +546,50 @@ export default function StudentDetailPage() {
                         </div>
                       ))}
                   </div>
-                </div>
+                </div>              </div>
 
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── CHECK-IN QR MODAL ── */}
+      {showQrModal && (
+        <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(15, 23, 42, 0.4)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10000 }} onClick={() => setShowQrModal(false)}>
+          <div style={{ background: "white", width: "100%", maxWidth: "380px", borderRadius: "28px", padding: "28px", boxShadow: "0 20px 40px rgba(0,0,0,0.1)", textAlign: "center", position: "relative" }} onClick={(e) => e.stopPropagation()}>
+            <button style={{ position: "absolute", top: "20px", right: "20px", background: "#f1f5f9", border: "none", width: "36px", height: "36px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#64748b" }} onClick={() => setShowQrModal(false)}>
+              <X size={18} />
+            </button>
+
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px", marginTop: "12px" }}>
+              <div style={{ width: "64px", height: "64px", background: "#f5f3ff", color: "#8b5cf6", borderRadius: "20px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <QrCode size={32} />
               </div>
 
+              <div>
+                <h3 style={{ fontSize: "20px", fontWeight: 900, color: "#0f172a", marginBottom: "4px" }}>Check-in Kartı</h3>
+                <p style={{ fontSize: "13px", fontWeight: 600, color: "#64748b" }}>{profile.firstName} {profile.lastName}</p>
+              </div>
+
+              {/* Glowing QR Container */}
+              <div style={{ background: "#ffffff", padding: "24px", borderRadius: "24px", border: "2px solid #f3f4f6", boxShadow: "0 10px 25px rgba(139, 92, 246, 0.05)", display: "inline-block", margin: "16px 0" }}>
+                <QRCodeSVG 
+                  value={profile.id} 
+                  size={180} 
+                  level="H" 
+                  fgColor="#0f172a" 
+                  includeMargin={false}
+                />
+              </div>
+
+              <div style={{ background: "#f8fafc", padding: "12px 16px", borderRadius: "14px", width: "100%" }}>
+                <div style={{ fontSize: "11px", fontWeight: 800, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>Dijital Giriş Kimliği</div>
+                <div style={{ fontSize: "12px", fontFamily: "monospace", fontWeight: 700, color: "#475569" }}>{profile.id}</div>
+              </div>
+
+              <p style={{ fontSize: "12px", fontWeight: 600, color: "#94a3b8", margin: 0, lineHeight: 1.4 }}>
+                Antrenör, telefon kamerasıyla bu kodu taratarak seans check-in işlemini gerçekleştirebilir.
+              </p>
             </div>
           </div>
         </div>
