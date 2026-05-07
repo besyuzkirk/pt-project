@@ -1,0 +1,28 @@
+:root {
+  /* Primary palette */
+  --color-primary: #4f46e5; /* Indigo */
+  --color-primary-hover: #4338ca;
+  --color-on-primary: #ffffff;
+
+  /* Background and surface */
+  --color-bg: #f8fafc;               /* Light gray */
+  --color-surface: #ffffff;          /* Surface (cards, headers) */
+  --color-surface-muted: #f1f5f9;    /* Slightly darker surface */
+  --color-border: #e2e8f0;           /* Borders */
+
+  /* Accent / accent background */
+  --color-accent-bg: #eff6ff;        /* Light blue accent */
+
+  /* Text colors */
+  --color-text: #0f172a;            /* Main text */
+  --color-muted: #64748b;           /* Secondary text */
+  --color-placeholder: #94a3b8;    /* Placeholder */
+
+  /* Font */
+  --font-base: 'Inter', sans-serif;
+  --font-size-base: 14px;
+
+  /* Misc */
+  --radius-base: 8px;
+  --radius-lg: 10px;
+}

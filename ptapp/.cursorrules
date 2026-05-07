@@ -1,0 +1,27 @@
+# Cursor Rules regarding this project
+
+## General Rules
+- ASLA hardcoded string kullanma! Tüm metinler lokalizasyon dosyalarında tutulmalıdır.
+- ASLA StatefulWidget/setState kullanma! Tüm state yönetimi Riverpod ile yapılmalıdır.
+- ASLA direkt renk kullanma! Tüm renkler theme'den alınmalıdır.
+- Clean Architecture prensiplerine uyulmalıdır.
+- Constants kullanılmalı, magic number'lar olmamalıdır.
+
+## State Management (Riverpod)
+- Use `@riverpod` annotation for all providers.
+- Use `ConsumerWidget` or `ConsumerStatefulWidget` (only if necessary for lifecycle, but try to avoid) for UI.
+- Keep logic in providers, UI should be dull.
+
+## Navigation (GoRouter)
+- Use `context.go()` or `context.push()`.
+- Define routes in `AppRouter`.
+
+## Localization
+- Use `easy_localization`.
+- `context.tr()` or `'key'.tr()`.
+- Add keys to `assets/translations/{lang}.json`.
+
+## Code Style
+- Use `final` variables where possible.
+- Use named parameters for constructors.
+- Avoid large build methods, extract widgets.

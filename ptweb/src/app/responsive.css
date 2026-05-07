@@ -1,0 +1,55 @@
+/* src/app/responsive.css */
+
+/* Mobile‑first defaults are already handled by globals.css */
+
+/* Tablet and up (min-width: 640px) */
+@media (min-width: 640px) {
+  .sidebar-fixed {
+    width: 240px;
+  }
+  .main-scrollable {
+    margin-left: 240px;
+    width: calc(100vw - 240px);
+  }
+}
+
+/* Tablet (max-width: 1024px) adjustments */
+@media (max-width: 1024px) {
+  .sidebar-fixed {
+    position: static;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    overflow-y: visible;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .main-scrollable {
+    margin-left: 0;
+    width: 100%;
+  }
+  .stat-box-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile (max-width: 640px) adjustments */
+@media (max-width: 640px) {
+  .header-fixed {
+    padding: 0 1rem;
+  }
+  .header-search-bar {
+    width: 100%;
+  }
+  .stat-box-grid {
+    grid-template-columns: 1fr;
+  }
+  .nav-menu-item {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  .btn-action-primary {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+}

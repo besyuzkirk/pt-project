@@ -1,0 +1,58 @@
+{
+  "title": "PT App",
+  "welcome": "Hoşgeldiniz",
+  "auth": {
+    "pt_login": "PT GİRİŞİ",
+    "student_login": "ÖĞRENCİ GİRİŞİ"
+  },
+  "nav": {
+    "home": "ANASAYFA",
+    "history": "GEÇMİŞ",
+    "checkin": "GİRİŞ",
+    "progress": "GELİŞİM",
+    "profile": "PROFİL",
+    "students": "ÖĞRENCİLER",
+    "calendar": "TAKVİM",
+    "fast_qr": "HIZLI QR",
+    "statistics": "İSTATİSTİK"
+  },
+  "pt_home": {
+    "my_students": "ÖĞRENCİLERİM",
+    "student": "Öğrenci",
+    "remaining_lessons": "Kalan Ders: {remaining} / {total}"
+  },
+  "pt_calendar": {
+    "title": "TAKVİM & PLAN",
+    "empty": "BOŞ",
+    "unknown_student": "Bilinmeyen Öğrenci",
+    "lesson": "Ders",
+    "days": {
+      "mon": "PZT",
+      "tue": "SAL",
+      "wed": "ÇAR",
+      "thu": "PER",
+      "fri": "CUM",
+      "sat": "CMT",
+      "sun": "PAZ"
+    }
+  },
+  "pt_student_detail": {
+    "student_upper": "ÖĞRENCİ",
+    "active_package_info": "Aktif Paket: 12 Derslik (Kalan 4)",
+    "add_goal": "HEDEF EKLE",
+    "hint_add_goal": "Yeni hedef giriniz...",
+    "add_measurement": "ÖLÇÜM GİR",
+    "dialog_add_measurement_title": "Ölçüm Sisteme Gir",
+    "hint_add_measurement": "Örn: Kg, Yağ Oranı...",
+    "assign_workout": "PROGRAM YAZ",
+    "dialog_assign_workout_title": "Antrenman Programı",
+    "hint_assign_workout": "Pzt: İtme, Salı: Çekme...",
+    "recent_statistics": "SON İSTATİSTİKLER",
+    "last_attendance": "Son Derse Katılım",
+    "last_measurement_status": "Son Ölçüm Durumu",
+    "active_goals": "Aktif Hedefler",
+    "cancel": "İptal",
+    "save": "Kaydet",
+    "saved_to_system": "Sisteme kaydedildi."
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "title": "PT App",
+  "welcome": "Welcome",
+  "auth": {
+    "pt_login": "PT LOGIN",
+    "student_login": "STUDENT LOGIN"
+  },
+  "nav": {
+    "home": "HOME",
+    "history": "HISTORY",
+    "checkin": "CHECK-IN",
+    "progress": "PROGRESS",
+    "profile": "PROFILE",
+    "students": "STUDENTS",
+    "calendar": "CALENDAR",
+    "fast_qr": "QUICK QR",
+    "statistics": "STATS"
+  },
+  "pt_home": {
+    "my_students": "MY STUDENTS",
+    "student": "Student",
+    "remaining_lessons": "Remaining Lessons: {remaining} / {total}"
+  },
+  "pt_calendar": {
+    "title": "CALENDAR & PLAN",
+    "empty": "EMPTY",
+    "unknown_student": "Unknown Student",
+    "lesson": "Lesson",
+    "days": {
+      "mon": "MON",
+      "tue": "TUE",
+      "wed": "WED",
+      "thu": "THU",
+      "fri": "FRI",
+      "sat": "SAT",
+      "sun": "SUN"
+    }
+  },
+  "pt_student_detail": {
+    "student_upper": "STUDENT",
+    "active_package_info": "Active Package: 12 Lessons (4 Remaining)",
+    "add_goal": "ADD GOAL",
+    "hint_add_goal": "Enter new goal...",
+    "add_measurement": "ADD MEASUREMENT",
+    "dialog_add_measurement_title": "Enter Measurement to System",
+    "hint_add_measurement": "e.g., Kg, Body Fat %...",
+    "assign_workout": "ASSIGN WORKOUT",
+    "dialog_assign_workout_title": "Workout Program",
+    "hint_assign_workout": "Mon: Push, Tue: Pull...",
+    "recent_statistics": "RECENT STATISTICS",
+    "last_attendance": "Last Attendance",
+    "last_measurement_status": "Last Measurement",
+    "active_goals": "Active Goals",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saved_to_system": "Saved to system."
+  }
+}

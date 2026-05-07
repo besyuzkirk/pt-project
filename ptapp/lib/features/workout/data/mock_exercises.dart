@@ -1,0 +1,92 @@
+import 'models/workout_exercise.dart';
+
+final List<WorkoutExercise> mockExercises = [
+  // CHEST
+  WorkoutExercise(id: 'c1', name: 'Barbell Bench Press', type: ExerciseType.strength),
+  WorkoutExercise(id: 'c2', name: 'Dumbbell Bench Press', type: ExerciseType.strength),
+  WorkoutExercise(id: 'c3', name: 'Incline Barbell Press', type: ExerciseType.strength),
+  WorkoutExercise(id: 'c4', name: 'Incline Dumbbell Press', type: ExerciseType.strength),
+  WorkoutExercise(id: 'c5', name: 'Decline Bench Press', type: ExerciseType.strength),
+  WorkoutExercise(id: 'c6', name: 'Dumbbell Fly', type: ExerciseType.strength),
+  WorkoutExercise(id: 'c7', name: 'Cable Crossover', type: ExerciseType.strength),
+  WorkoutExercise(id: 'c8', name: 'Push Up', type: ExerciseType.strength),
+  WorkoutExercise(id: 'c9', name: 'Dips (Chest)', type: ExerciseType.strength),
+  WorkoutExercise(id: 'c10', name: 'Machine Chest Press', type: ExerciseType.strength),
+  WorkoutExercise(id: 'c11', name: 'Pec Deck / Machine Fly', type: ExerciseType.strength),
+
+  // BACK
+  WorkoutExercise(id: 'b1', name: 'Deadlift', type: ExerciseType.strength),
+  WorkoutExercise(id: 'b2', name: 'Pull Up', type: ExerciseType.strength),
+  WorkoutExercise(id: 'b3', name: 'Chin Up', type: ExerciseType.strength),
+  WorkoutExercise(id: 'b4', name: 'Lat Pulldown', type: ExerciseType.strength),
+  WorkoutExercise(id: 'b5', name: 'Seated Cable Row', type: ExerciseType.strength),
+  WorkoutExercise(id: 'b6', name: 'Bent Over Barbell Row', type: ExerciseType.strength),
+  WorkoutExercise(id: 'b7', name: 'Bent Over Dumbbell Row', type: ExerciseType.strength),
+  WorkoutExercise(id: 'b8', name: 'T-Bar Row', type: ExerciseType.strength),
+  WorkoutExercise(id: 'b9', name: 'Face Pull', type: ExerciseType.strength),
+  WorkoutExercise(id: 'b10', name: 'Hyperextension', type: ExerciseType.strength),
+  WorkoutExercise(id: 'b11', name: 'Dumbbell Pullover', type: ExerciseType.strength),
+
+  // LEGS
+  WorkoutExercise(id: 'l1', name: 'Barbell Squat', type: ExerciseType.strength),
+  WorkoutExercise(id: 'l2', name: 'Front Squat', type: ExerciseType.strength),
+  WorkoutExercise(id: 'l3', name: 'Goblet Squat', type: ExerciseType.strength),
+  WorkoutExercise(id: 'l4', name: 'Leg Press', type: ExerciseType.strength),
+  WorkoutExercise(id: 'l5', name: 'Walking Lunge', type: ExerciseType.strength),
+  WorkoutExercise(id: 'l6', name: 'Bulgarian Split Squat', type: ExerciseType.strength),
+  WorkoutExercise(id: 'l7', name: 'Leg Extension', type: ExerciseType.strength),
+  WorkoutExercise(id: 'l8', name: 'Seated Leg Curl', type: ExerciseType.strength),
+  WorkoutExercise(id: 'l9', name: 'Lying Leg Curl', type: ExerciseType.strength),
+  WorkoutExercise(id: 'l10', name: 'Standing Calf Raise', type: ExerciseType.strength),
+  WorkoutExercise(id: 'l11', name: 'Seated Calf Raise', type: ExerciseType.strength),
+  WorkoutExercise(id: 'l12', name: 'Hip Thrust', type: ExerciseType.strength),
+  WorkoutExercise(id: 'l13', name: 'Romainian Deadlift (RDL)', type: ExerciseType.strength),
+  WorkoutExercise(id: 'l14', name: 'Sumo Deadlift', type: ExerciseType.strength),
+
+  // SHOULDERS
+  WorkoutExercise(id: 's1', name: 'Overhead Press (Barbell)', type: ExerciseType.strength),
+  WorkoutExercise(id: 's2', name: 'Seated Dumbbell Press', type: ExerciseType.strength),
+  WorkoutExercise(id: 's3', name: 'Arnold Press', type: ExerciseType.strength),
+  WorkoutExercise(id: 's4', name: 'Lateral Raise (Dumbbell)', type: ExerciseType.strength),
+  WorkoutExercise(id: 's5', name: 'Cable Lateral Raise', type: ExerciseType.strength),
+  WorkoutExercise(id: 's6', name: 'Front Raise', type: ExerciseType.strength),
+  WorkoutExercise(id: 's7', name: 'Reverse Fly (Machine)', type: ExerciseType.strength),
+  WorkoutExercise(id: 's8', name: 'Reverse Fly (Dumbbell)', type: ExerciseType.strength),
+  WorkoutExercise(id: 's9', name: 'Upright Row', type: ExerciseType.strength),
+  WorkoutExercise(id: 's10', name: 'Shrugs', type: ExerciseType.strength),
+
+  // ARMS (BICEPS & TRICEPS)
+  WorkoutExercise(id: 'a1', name: 'Barbell Curl', type: ExerciseType.strength),
+  WorkoutExercise(id: 'a2', name: 'Dumbbell Curl', type: ExerciseType.strength),
+  WorkoutExercise(id: 'a3', name: 'Hammer Curl', type: ExerciseType.strength),
+  WorkoutExercise(id: 'a4', name: 'Preacher Curl', type: ExerciseType.strength),
+  WorkoutExercise(id: 'a5', name: 'Concentration Curl', type: ExerciseType.strength),
+  WorkoutExercise(id: 'a6', name: 'Wiliams Extension', type: ExerciseType.strength),
+  WorkoutExercise(id: 'a7', name: 'Tricep Pushdown (Cable)', type: ExerciseType.strength),
+  WorkoutExercise(id: 'a8', name: 'Tricep Rope Pushdown', type: ExerciseType.strength),
+  WorkoutExercise(id: 'a9', name: 'Skullcrusher', type: ExerciseType.strength),
+  WorkoutExercise(id: 'a10', name: 'Overhead Tricep Extension', type: ExerciseType.strength),
+  WorkoutExercise(id: 'a11', name: 'Close Grip Bench Press', type: ExerciseType.strength),
+  WorkoutExercise(id: 'a12', name: 'Dips (Triceps)', type: ExerciseType.strength),
+
+  // ABS / CORE
+  WorkoutExercise(id: 'core1', name: 'Plank', type: ExerciseType.strength),
+  WorkoutExercise(id: 'core2', name: 'Crunch', type: ExerciseType.strength),
+  WorkoutExercise(id: 'core3', name: 'Leg Raise', type: ExerciseType.strength),
+  WorkoutExercise(id: 'core4', name: 'Russian Twist', type: ExerciseType.strength),
+  WorkoutExercise(id: 'core5', name: 'Ab Wheel Rollout', type: ExerciseType.strength),
+  WorkoutExercise(id: 'core6', name: 'Cable Crunch', type: ExerciseType.strength),
+  WorkoutExercise(id: 'core7', name: 'Mountain Climbers', type: ExerciseType.strength),
+
+  // CARDIO
+  WorkoutExercise(id: 'cardio1', name: 'Treadmill Run', type: ExerciseType.cardio),
+  WorkoutExercise(id: 'cardio2', name: 'Treadmill Walk (Incline)', type: ExerciseType.cardio),
+  WorkoutExercise(id: 'cardio3', name: 'Cycling (Stationary)', type: ExerciseType.cardio),
+  WorkoutExercise(id: 'cardio4', name: 'Elliptical', type: ExerciseType.cardio),
+  WorkoutExercise(id: 'cardio5', name: 'Rowing Machine', type: ExerciseType.cardio),
+  WorkoutExercise(id: 'cardio6', name: 'Jump Rope', type: ExerciseType.cardio),
+  WorkoutExercise(id: 'cardio7', name: 'Stair Master', type: ExerciseType.cardio),
+  WorkoutExercise(id: 'cardio8', name: 'HIIT', type: ExerciseType.cardio),
+  WorkoutExercise(id: 'cardio9', name: 'Swimming', type: ExerciseType.cardio),
+  WorkoutExercise(id: 'cardio10', name: 'Boxing', type: ExerciseType.cardio),
+];

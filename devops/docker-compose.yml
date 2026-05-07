@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database Service
+  postgres:
+    image: postgres:16-alpine
+    container_name: ptapp_postgres
+    environment:
+      POSTGRES_USER: pt_admin
+      POSTGRES_PASSWORD: pt_password123
+      POSTGRES_DB: ptapp_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ptapp_pg_data:/var/lib/postgresql/data
+    networks:
+      - ptapp_network
+    restart: unless-stopped
+
+  # pgAdmin GUI Service
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: ptapp_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@ptapp.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - ptapp_network
+    restart: unless-stopped
+
+volumes:
+  ptapp_pg_data:
+
+networks:
+  ptapp_network:
+    driver: bridge
