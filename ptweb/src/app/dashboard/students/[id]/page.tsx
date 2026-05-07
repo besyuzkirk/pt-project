@@ -155,8 +155,8 @@ export default function StudentDetailPage() {
       </Link>
 
       {/* Profile Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "40px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+      <div className="student-header-container" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "40px" }}>
+        <div className="student-header-info" style={{ display: "flex", alignItems: "center", gap: "24px" }}>
           <div style={{ width: "80px", height: "80px", background: "#eff6ff", color: "#4f46e5", borderRadius: "24px", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: "28px" }}>
             {profile.firstName.charAt(0)}{profile.lastName.charAt(0)}
           </div>
@@ -170,7 +170,7 @@ export default function StudentDetailPage() {
             </div>
           </div>
         </div>
-        <div style={{ display: "flex", gap: "12px" }}>
+        <div className="student-header-actions" style={{ display: "flex", gap: "12px" }}>
           <Link href={`/dashboard/assign-package?studentId=${profile.id}`} style={{ textDecoration: "none" }}>
             <button className="btn-action-primary" style={{ background: "#4f46e5" }} onMouseOver={(e) => e.currentTarget.style.background = "#4338ca"} onMouseOut={(e) => e.currentTarget.style.background = "#4f46e5"}>
               <Package size={18} />
@@ -186,7 +186,7 @@ export default function StudentDetailPage() {
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "32px" }}>
+      <div className="student-detail-grid" style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "32px" }}>
         {/* Left Column: Personal Info & Stats */}
         <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
           

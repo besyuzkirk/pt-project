@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   LayoutDashboard, Users, UserPlus, UserCog, Package,
-  Calendar, Bell, Settings, LogOut, Search, ChevronDown
+  Calendar, Bell, Settings, LogOut, Search, ChevronDown, Menu, X
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -87,6 +87,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const router = useRouter();
   const { isAdmin, isStudent, isLoading } = useRole();
   const [user, setUser] = useState({ name: "Yükleniyor...", role: "..." });
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!isLoading && isStudent) {
@@ -199,6 +200,83 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {children}
         </main>
       </div>
+
+      {/* ── MOBILE BOTTOM NAV ── */}
+      <div className="mobile-bottom-nav">
+        <Link href="/dashboard" className={`mobile-nav-item ${pathname === "/dashboard" ? "active" : ""}`}>
+          <LayoutDashboard size={22} />
+          <span>Panel</span>
+        </Link>
+        <Link href="/dashboard/students" className={`mobile-nav-item ${pathname.startsWith("/dashboard/students") ? "active" : ""}`}>
+          <Users size={22} />
+          <span>Danışanlar</span>
+        </Link>
+        <Link href="/dashboard/calendar" className={`mobile-nav-item ${pathname === "/dashboard/calendar" ? "active" : ""}`}>
+          <Calendar size={22} />
+          <span>Takvim</span>
+        </Link>
+        <button onClick={() => setIsMobileMenuOpen(true)} className="mobile-nav-item">
+          <Menu size={22} />
+          <span>Menü</span>
+        </button>
+      </div>
+
+      {/* ── MOBILE SLIDING BOTTOM SHEET OVERLAY ── */}
+      {isMobileMenuOpen && (
+        <div className="mobile-sheet-backdrop" onClick={() => setIsMobileMenuOpen(false)}>
+          <div className="mobile-sheet-container" onClick={(e) => e.stopPropagation()}>
+            <div className="mobile-sheet-header">
+              <h3>Hızlı İşlemler & Menü</h3>
+              <button className="mobile-sheet-close" onClick={() => setIsMobileMenuOpen(false)}>
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="mobile-sheet-grid">
+              <Link href="/dashboard/register-student" onClick={() => setIsMobileMenuOpen(false)} className="mobile-grid-item">
+                <div className="item-icon-bg purple"><UserPlus size={20} /></div>
+                <span>Danışan Ekle</span>
+              </Link>
+              {isAdmin && (
+                <>
+                  <Link href="/dashboard/register-trainer" onClick={() => setIsMobileMenuOpen(false)} className="mobile-grid-item">
+                    <div className="item-icon-bg green"><UserPlus size={20} /></div>
+                    <span>Trainer Ekle</span>
+                  </Link>
+                  <Link href="/dashboard/trainers" onClick={() => setIsMobileMenuOpen(false)} className="mobile-grid-item">
+                    <div className="item-icon-bg blue"><Users size={20} /></div>
+                    <span>Trainer Listesi</span>
+                  </Link>
+                </>
+              )}
+              <Link href="/dashboard/packages" onClick={() => setIsMobileMenuOpen(false)} className="mobile-grid-item">
+                <div className="item-icon-bg orange"><Package size={20} /></div>
+                <span>Paketler</span>
+              </Link>
+              <Link href="/dashboard/assign-package" onClick={() => setIsMobileMenuOpen(false)} className="mobile-grid-item">
+                <div className="item-icon-bg indigo"><Package size={20} /></div>
+                <span>Paket Atama</span>
+              </Link>
+              <Link href="/dashboard/notifications" onClick={() => setIsMobileMenuOpen(false)} className="mobile-grid-item">
+                <div className="item-icon-bg red"><Bell size={20} /></div>
+                <span>Bildirimler</span>
+              </Link>
+              <Link href="/dashboard/settings" onClick={() => setIsMobileMenuOpen(false)} className="mobile-grid-item">
+                <div className="item-icon-bg gray"><Settings size={20} /></div>
+                <span>Ayarlar</span>
+              </Link>
+            </div>
+
+            <button 
+              onClick={() => { window.location.href = "/login"; }}
+              className="mobile-sheet-logout"
+            >
+              <LogOut size={18} />
+              <span>Oturumu Kapat</span>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
