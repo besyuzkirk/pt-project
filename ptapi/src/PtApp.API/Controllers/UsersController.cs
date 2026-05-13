@@ -10,7 +10,7 @@ namespace PtApp.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Admin,Trainer")]
+[Authorize]
 public class UsersController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -34,7 +34,7 @@ public class UsersController : ControllerBase
     /// Giriş yapmış trainer'ın kendi danışanlarını listeler (Trainer only)
     /// </summary>
     [HttpGet("my-students")]
-    [Authorize(Roles = "Trainer")]
+    [Authorize(Roles = "Admin,Trainer")]
     public async Task<ActionResult<List<UserListDto>>> GetMyStudents()
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -55,11 +55,21 @@ public class UsersController : ControllerBase
     }
 
     /// <summary>
-    /// Danışan profil detaylarını getirir
+    /// Danışan profil detaylarını getirir (Admin, Trainer ve Danışanın kendisi görebilir)
     /// </summary>
     [HttpGet("students/{id}")]
     public async Task<ActionResult<StudentProfileDto>> GetStudentProfile(Guid id)
     {
+        var roleString = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+        if (roleString == "Student")
+        {
+            var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (userIdString == null || !Guid.TryParse(userIdString, out var studentId) || studentId != id)
+            {
+                return Forbid();
+            }
+        }
+
         return await _mediator.Send(new GetStudentProfileQuery(id));
     }
 
@@ -67,6 +77,7 @@ public class UsersController : ControllerBase
     /// Danışanın temel bilgilerini ve atanan eğitmenini günceller
     /// </summary>
     [HttpPut("students/{id}")]
+    [Authorize(Roles = "Admin,Trainer")]
     public async Task<ActionResult> UpdateStudent(Guid id, [FromBody] PtApp.Application.Features.Users.Commands.UpdateStudentCommand command)
     {
         if (id != command.StudentId)

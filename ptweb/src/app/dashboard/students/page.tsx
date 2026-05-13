@@ -150,7 +150,7 @@ export default function StudentsPage() {
   return (
     <div>
       {/* Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "40px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "clamp(20px, 4vw, 40px)", flexWrap: "wrap", gap: "12px" }}>
         <div>
           <h1 style={{ fontSize: "32px", fontWeight: 900, color: "#0f172a", letterSpacing: "-1px", marginBottom: "8px" }}>
             {isAdmin ? "Danışan Yönetimi" : "Danışanlarım"}
@@ -188,8 +188,8 @@ export default function StudentsPage() {
       )}
 
       {/* Search */}
-      <div style={{ background: "white", border: "1px solid #e2e8f0", borderRadius: "14px", padding: "16px 20px", marginBottom: "24px", display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
-        <div className="header-search-bar" style={{ width: "320px" }}>
+      <div style={{ background: "white", border: "1px solid #e2e8f0", borderRadius: "14px", padding: "12px 16px", marginBottom: "20px", display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
+        <div className="header-search-bar students-search-bar" style={{ flex: "1 1 200px", minWidth: 0, width: "auto" }}>
           <Search size={18} color="#94a3b8" />
           <input
             type="text"
@@ -200,7 +200,7 @@ export default function StudentsPage() {
           />
         </div>
 
-        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+        <div style={{ display: "flex", gap: "8px", alignItems: "center", flex: "1 1 160px" }}>
           <select 
             value={sessionFilter} 
             onChange={(e: any) => setSessionFilter(e.target.value)} 
@@ -214,7 +214,7 @@ export default function StudentsPage() {
               color: "#475569", 
               outline: "none", 
               cursor: "pointer",
-              transition: "all 0.2s"
+              width: "100%"
             }}
           >
             <option value="all">Tüm Seans Durumları 📊</option>
@@ -224,7 +224,7 @@ export default function StudentsPage() {
           </select>
         </div>
 
-        <div style={{ marginLeft: "auto", fontSize: "13px", color: "#94a3b8", fontWeight: 600 }}>
+        <div style={{ fontSize: "13px", color: "#94a3b8", fontWeight: 600, whiteSpace: "nowrap" }}>
           {filtered.length} sonuç
         </div>
       </div>
@@ -237,7 +237,7 @@ export default function StudentsPage() {
       )}
 
       {/* Table */}
-      <div style={{ background: "white", border: "1px solid #e2e8f0", borderRadius: "20px", overflow: "hidden", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
+      <div style={{ background: "white", border: "1px solid #e2e8f0", borderRadius: "20px", overflow: "visible", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
         {loading ? (
           <div style={{ padding: "80px", textAlign: "center", color: "#94a3b8", fontWeight: 600 }}>
             Yükleniyor...
@@ -254,12 +254,12 @@ export default function StudentsPage() {
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
               <tr style={{ background: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
-                <th style={{ padding: "16px 24px", textAlign: "left", fontSize: "11px", fontWeight: 800, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.07em" }}>Danışan</th>
+                <th style={{ padding: "16px 24px", textAlign: "left", fontSize: "11px", fontWeight: 800, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.07em", borderTopLeftRadius: "20px" }}>Danışan</th>
                 <th style={{ padding: "16px 24px", textAlign: "left", fontSize: "11px", fontWeight: 800, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.07em" }}>Telefon</th>
                 <th style={{ padding: "16px 24px", textAlign: "left", fontSize: "11px", fontWeight: 800, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.07em" }}>Aktif Paket / Seans</th>
                 <th style={{ padding: "16px 24px", textAlign: "left", fontSize: "11px", fontWeight: 800, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.07em" }}>Kayıt Tarihi</th>
                 <th style={{ padding: "16px 24px", textAlign: "left", fontSize: "11px", fontWeight: 800, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.07em" }}>Durum</th>
-                <th style={{ padding: "16px 24px", textAlign: "right", fontSize: "11px", fontWeight: 800, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.07em" }}>İşlem</th>
+                <th style={{ padding: "16px 24px", textAlign: "right", fontSize: "11px", fontWeight: 800, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.07em", borderTopRightRadius: "20px" }}>İşlem</th>
               </tr>
             </thead>
             <tbody>

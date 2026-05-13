@@ -47,9 +47,10 @@ public class VerifyOtpCommandHandler : IRequestHandler<VerifyOtpCommand, AuthRes
 
         return new AuthResponseDto
         {
+            Id = user.Id.ToString(),
             AccessToken = accessToken,
             RefreshToken = refreshToken,
-            PhoneNumber = user.PhoneNumber,
+            PhoneNumber = user.PhoneNumber ?? string.Empty,
             FirstName = user.FirstName,
             LastName = user.LastName,
             Role = user.Role.ToString()

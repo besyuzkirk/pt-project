@@ -53,6 +53,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, AuthRespo
 
         return new AuthResponseDto
         {
+            Id = user.Id.ToString(),
             AccessToken = accessToken,
             RefreshToken = refreshToken,
             Email = user.Email!,

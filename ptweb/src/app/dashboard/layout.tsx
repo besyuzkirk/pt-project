@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   LayoutDashboard, Users, UserPlus, UserCog, Package,
-  Calendar, Bell, Settings, LogOut, Search, ChevronDown, Menu, X, QrCode, Scan
+  Calendar, Bell, Settings, LogOut, Search, ChevronDown, Menu, X, QrCode, Scan, CreditCard
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -33,13 +33,13 @@ const adminMenuSections = [
     title: "YÖNETİM",
     items: [
       { icon: Package, label: "Paketler", href: "/dashboard/packages" },
+      { icon: CreditCard, label: "Kasa & Ödemeler", href: "/dashboard/payments" },
     ]
   },
   {
-    title: "PLANLAMA & ATAMA",
+    title: "PLANLAMA",
     items: [
       { icon: Calendar, label: "Takvim", href: "/dashboard/calendar" },
-      { icon: Package, label: "Paket Atama", href: "/dashboard/assign-package" },
     ]
   },
   {
@@ -69,7 +69,6 @@ const trainerMenuSections = [
     items: [
       { icon: Package, label: "Paketler", href: "/dashboard/packages" },
       { icon: Calendar, label: "Takvim", href: "/dashboard/calendar" },
-      { icon: Package, label: "Paket Atama", href: "/dashboard/assign-package" },
     ]
   },
   {
@@ -105,7 +104,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const menuSections = isAdmin ? adminMenuSections : trainerMenuSections;
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", width: "100vw", overflow: "hidden" }}>
+    <div style={{ display: "flex", minHeight: "100vh", width: "100vw", overflowX: "hidden" }}>
       {/* ── SIDEBAR ── */}
       <aside className="sidebar-fixed">
         {/* Logo */}
@@ -183,7 +182,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </button>
 
             <div style={{ display: "flex", alignItems: "center", gap: "12px", paddingLeft: "16px", borderLeft: "1px solid #e2e8f0" }}>
-              <div style={{ textAlign: "right" }}>
+              <div style={{ textAlign: "right" }} className="hide-on-mobile">
                 <div style={{ fontSize: "14px", fontWeight: 800, color: "#0f172a", lineHeight: 1 }}>{user.name}</div>
                 <div style={{ fontSize: "10px", fontWeight: 700, color: "#4f46e5", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: "3px" }}>{user.role}</div>
               </div>
@@ -257,10 +256,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <div className="item-icon-bg orange"><Package size={20} /></div>
                 <span>Paketler</span>
               </Link>
-              <Link href="/dashboard/assign-package" onClick={() => setIsMobileMenuOpen(false)} className="mobile-grid-item">
-                <div className="item-icon-bg indigo"><Package size={20} /></div>
-                <span>Paket Atama</span>
-              </Link>
+
               <Link href="/dashboard/notifications" onClick={() => setIsMobileMenuOpen(false)} className="mobile-grid-item">
                 <div className="item-icon-bg red"><Bell size={20} /></div>
                 <span>Bildirimler</span>

@@ -34,9 +34,10 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponseDto
 
         return new AuthResponseDto
         {
+            Id = user.Id.ToString(),
             AccessToken = accessToken,
             RefreshToken = refreshToken,
-            Email = user.Email!,
+            Email = user.Email ?? string.Empty,
             FirstName = user.FirstName,
             LastName = user.LastName,
             Role = user.Role.ToString()

@@ -41,9 +41,10 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, A
 
         return new AuthResponseDto
         {
+            Id = user.Id.ToString(),
             AccessToken = newAccessToken,
             RefreshToken = newRefreshToken,
-            PhoneNumber = user.PhoneNumber,
+            PhoneNumber = user.PhoneNumber ?? string.Empty,
             FirstName = user.FirstName,
             LastName = user.LastName,
             Role = user.Role.ToString()

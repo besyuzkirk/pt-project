@@ -27,6 +27,7 @@ public class UpdateAppointmentCommandHandler : IRequestHandler<UpdateAppointment
     public async Task Handle(UpdateAppointmentCommand request, CancellationToken cancellationToken)
     {
         var appointment = await _context.Appointments
+            .Include(a => a.Attendees)
             .FirstOrDefaultAsync(a => a.Id == request.AppointmentId && !a.IsDeleted, cancellationToken);
 
         if (appointment == null)
@@ -34,7 +35,23 @@ public class UpdateAppointmentCommandHandler : IRequestHandler<UpdateAppointment
 
         if (request.NewScheduledAt.HasValue)
         {
-            appointment.ScheduledAt = request.NewScheduledAt.Value;
+            var newTime = request.NewScheduledAt.Value.ToUniversalTime();
+            var studentIds = appointment.Attendees.Select(att => att.StudentId).ToList();
+
+            if (studentIds.Any())
+            {
+                var alreadyHasAppt = await _context.Appointments
+                    .Where(a => a.Id != appointment.Id && !a.IsDeleted && a.Status != AppointmentStatus.Cancelled)
+                    .Where(a => a.ScheduledAt == newTime)
+                    .AnyAsync(a => a.Attendees.Any(att => studentIds.Contains(att.StudentId)), cancellationToken);
+
+                if (alreadyHasAppt)
+                {
+                    throw new Exception("Bu danışanın belirtilen tarih ve saatte zaten aktif bir seansı bulunuyor! Tekrar atanamaz.");
+                }
+            }
+
+            appointment.ScheduledAt = newTime;
         }
 
         if (request.NewStatus.HasValue)

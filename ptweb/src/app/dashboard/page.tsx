@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Users, Dumbbell, TrendingUp, Calendar, Loader2, Clock, CheckCircle, Award, Sparkles } from "lucide-react";
+import { Users, Dumbbell, TrendingUp, Calendar, Loader2, Clock, CheckCircle, Award, Sparkles, X, CreditCard, Banknote, Landmark } from "lucide-react";
 import axios from "axios";
 import { useRole } from "../lib/useRole";
+import { motion, AnimatePresence } from "framer-motion";
 
 const API_BASE = "http://localhost:5064/api";
 
@@ -30,12 +31,19 @@ interface TrainerLessonCount {
   lessonCount: number;
 }
 
+interface PaymentMethodBreakdown {
+  cash: number;
+  card: number;
+  transfer: number;
+}
+
 interface DashboardData {
   activeMembersCount: number;
   thisMonthWorkoutsCount: number;
   monthlyRevenue: number;
   allTimeRevenue: number;
   pendingProgramsCount: number;
+  monthlyPaymentBreakdown: PaymentMethodBreakdown;
   todayAppointments: DashboardAppointment[];
   recentCompletedSessions: DashboardWorkoutSession[];
   trainerLessonCounts: TrainerLessonCount[];
@@ -47,6 +55,7 @@ export default function DashboardOverview() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [revenueFilter, setRevenueFilter] = useState<"monthly" | "allTime">("monthly");
+  const [showBreakdownModal, setShowBreakdownModal] = useState(false);
 
   useEffect(() => {
     if (roleLoading) return;
@@ -136,7 +145,7 @@ export default function DashboardOverview() {
   return (
     <div>
       {/* Page Title */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "40px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "clamp(20px, 4vw, 40px)" }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "4px" }}>
             <h1 style={{ fontSize: "32px", fontWeight: 900, color: "#0f172a", letterSpacing: "-1px" }}>
@@ -153,9 +162,24 @@ export default function DashboardOverview() {
       </div>
 
       {/* Stats Grid */}
-      <div className="stat-box-grid">
+      <div className="stat-box-grid" style={{ marginBottom: "clamp(16px, 3vw, 40px)" }}>
         {stats.map((stat) => (
-          <div key={stat.label} style={{ background: "white", border: "1px solid #e2e8f0", borderRadius: "20px", padding: "24px", boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01)", position: "relative", overflow: "hidden" }}>
+          <motion.div 
+            key={stat.label} 
+            whileHover={stat.isRevenue ? { scale: 1.02, y: -2, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.05)" } : {}}
+            whileTap={stat.isRevenue ? { scale: 0.99 } : {}}
+            onClick={stat.isRevenue ? () => setShowBreakdownModal(true) : undefined}
+            style={{ 
+              background: "white", 
+              border: "1px solid #e2e8f0", 
+              borderRadius: "20px", 
+              padding: "24px", 
+              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01)", 
+              position: "relative", 
+              overflow: "hidden",
+              cursor: stat.isRevenue ? "pointer" : "default"
+            }}
+          >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
               <div style={{ width: "48px", height: "48px", background: stat.bgColor, borderRadius: "14px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <stat.icon size={22} color={stat.color} />
@@ -164,12 +188,12 @@ export default function DashboardOverview() {
               {stat.isRevenue && (
                 <div style={{ display: "flex", background: "#f1f5f9", borderRadius: "10px", padding: "2px" }}>
                   <button 
-                    onClick={() => setRevenueFilter("monthly")}
+                    onClick={(e) => { e.stopPropagation(); setRevenueFilter("monthly"); }}
                     style={{ border: "none", background: revenueFilter === "monthly" ? "white" : "transparent", color: revenueFilter === "monthly" ? "#0f172a" : "#64748b", fontSize: "10px", fontWeight: 800, padding: "4px 8px", borderRadius: "8px", cursor: "pointer", boxShadow: revenueFilter === "monthly" ? "0 1px 3px rgba(0,0,0,0.1)" : "none" }}>
                     Aylık
                   </button>
                   <button 
-                    onClick={() => setRevenueFilter("allTime")}
+                    onClick={(e) => { e.stopPropagation(); setRevenueFilter("allTime"); }}
                     style={{ border: "none", background: revenueFilter === "allTime" ? "white" : "transparent", color: revenueFilter === "allTime" ? "#0f172a" : "#64748b", fontSize: "10px", fontWeight: 800, padding: "4px 8px", borderRadius: "8px", cursor: "pointer", boxShadow: revenueFilter === "allTime" ? "0 1px 3px rgba(0,0,0,0.1)" : "none" }}>
                     Tümü
                   </button>
@@ -179,11 +203,11 @@ export default function DashboardOverview() {
             <div style={{ fontSize: "28px", fontWeight: 900, color: "#0f172a", marginBottom: "4px", letterSpacing: "-0.5px" }}>{stat.value}</div>
             <div style={{ fontSize: "12px", fontWeight: 800, color: "#475569", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "6px" }}>{stat.label}</div>
             <p style={{ fontSize: "11px", color: "#94a3b8", fontWeight: 600, margin: 0 }}>{stat.desc}</p>
-          </div>
+          </motion.div>
         ))}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: isAdmin ? "1.5fr 1fr" : "1fr 1fr", gap: "32px", marginTop: "32px" }}>
+      <div className="dashboard-panels-grid" style={{ display: "grid", gridTemplateColumns: isAdmin ? "1.5fr 1fr" : "1fr 1fr", gap: "clamp(16px, 3vw, 32px)", marginTop: "clamp(16px, 3vw, 32px)" }}>
         {/* Today's Appointments (Bugün Gelecekler) */}
         <div style={{ background: "white", border: "1px solid #e2e8f0", borderRadius: "24px", padding: "28px", boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.02)" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
@@ -271,7 +295,7 @@ export default function DashboardOverview() {
 
       {/* Admin Only: Trainer Monthly Performance (Tüm Eğitmenlerin Ders Performansı) */}
       {isAdmin && (
-        <div style={{ background: "white", border: "1px solid #e2e8f0", borderRadius: "24px", padding: "28px", marginTop: "32px", boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.02)" }}>
+        <div style={{ background: "white", border: "1px solid #e2e8f0", borderRadius: "24px", padding: "clamp(16px, 3vw, 28px)", marginTop: "clamp(16px, 3vw, 32px)", boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.02)" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
             <div>
               <h2 style={{ fontSize: "18px", fontWeight: 900, color: "#0f172a", letterSpacing: "-0.3px" }}>Bu Ayki Eğitmen Ders Performansları</h2>
@@ -307,6 +331,158 @@ export default function DashboardOverview() {
           )}
         </div>
       )}
+      {/* Revenue Breakdown Modal */}
+      <AnimatePresence>
+        {showBreakdownModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowBreakdownModal(false)}
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: "rgba(15, 23, 42, 0.6)",
+              backdropFilter: "blur(4px)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 9999,
+              padding: "20px"
+            }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", duration: 0.5 }}
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                background: "white",
+                width: "100%",
+                maxWidth: "480px",
+                borderRadius: "28px",
+                padding: "32px",
+                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+                position: "relative",
+                overflow: "hidden"
+              }}
+            >
+              {/* Close Button */}
+              <motion.button
+                whileHover={{ scale: 1.1, backgroundColor: "#e2e8f0" }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setShowBreakdownModal(false)}
+                style={{
+                  position: "absolute",
+                  top: "20px",
+                  right: "20px",
+                  background: "#f1f5f9",
+                  border: "none",
+                  borderRadius: "50%",
+                  width: "36px",
+                  height: "36px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  color: "#64748b"
+                }}
+              >
+                <X size={18} />
+              </motion.button>
+
+              {/* Modal Header */}
+              <div style={{ marginBottom: "24px" }}>
+                <h3 style={{ fontSize: "20px", fontWeight: 900, color: "#0f172a", letterSpacing: "-0.5px" }}>
+                  Bu Ayki Gelir Dağılımı
+                </h3>
+                <p style={{ fontSize: "13px", color: "#64748b", fontWeight: 600, marginTop: "4px" }}>
+                  Ödemelerin yöntemlere göre istatistiği
+                </p>
+              </div>
+
+              {/* Top Total Highlight */}
+              <div style={{ 
+                background: "linear-gradient(135deg, #10b981 0%, #059669 100%)", 
+                borderRadius: "20px", 
+                padding: "24px", 
+                color: "white", 
+                marginBottom: "28px",
+                boxShadow: "0 10px 20px -5px rgba(16, 185, 129, 0.3)"
+              }}>
+                <div style={{ fontSize: "12px", fontWeight: 800, textTransform: "uppercase", opacity: 0.8, letterSpacing: "0.05em" }}>
+                  Toplam Aylık Gelir (Ödenmiş)
+                </div>
+                <div style={{ fontSize: "36px", fontWeight: 900, marginTop: "4px", letterSpacing: "-1px" }}>
+                  {new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY", maximumFractionDigits: 0 }).format(data.monthlyRevenue)}
+                </div>
+              </div>
+
+              {/* Graphic Breakdown (Visual Bars) */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+                {(() => {
+                  const breakdown = data.monthlyPaymentBreakdown || { cash: 0, card: 0, transfer: 0 };
+                  const total = (breakdown.cash + breakdown.card + breakdown.transfer) || 1; // avoid division by 0
+                  
+                  const items = [
+                    { label: "Nakit", val: breakdown.cash, color: "#f59e0b", icon: Banknote, bg: "#fef3c7" },
+                    { label: "Kredi Kartı", val: breakdown.card, color: "#3b82f6", icon: CreditCard, bg: "#dbeafe" },
+                    { label: "Havale / EFT", val: breakdown.transfer, color: "#8b5cf6", icon: Landmark, bg: "#ede9fe" }
+                  ].sort((a, b) => b.val - a.val);
+
+                  return items.map((item, idx) => {
+                    const pct = ((item.val / total) * 100);
+                    return (
+                      <div key={idx} style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            <div style={{ 
+                              width: "36px", 
+                              height: "36px", 
+                              background: item.bg, 
+                              borderRadius: "10px", 
+                              display: "flex", 
+                              alignItems: "center", 
+                              justifyContent: "center",
+                              color: item.color 
+                            }}>
+                              <item.icon size={18} />
+                            </div>
+                            <div>
+                              <div style={{ fontSize: "14px", fontWeight: 800, color: "#1e293b" }}>{item.label}</div>
+                              <div style={{ fontSize: "11px", color: "#94a3b8", fontWeight: 700 }}>%{pct.toFixed(0)}</div>
+                            </div>
+                          </div>
+                          <div style={{ fontSize: "15px", fontWeight: 900, color: "#0f172a" }}>
+                            {new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY", maximumFractionDigits: 0 }).format(item.val)}
+                          </div>
+                        </div>
+                        {/* Styled Progress Bar */}
+                        <div style={{ width: "100%", height: "8px", background: "#f1f5f9", borderRadius: "99px", overflow: "hidden" }}>
+                          <motion.div 
+                            initial={{ width: 0 }}
+                            animate={{ width: `${pct}%` }}
+                            transition={{ duration: 0.8, delay: 0.2 + (idx * 0.1), ease: "easeOut" }}
+                            style={{ 
+                              height: "100%", 
+                              background: item.color, 
+                              borderRadius: "99px" 
+                            }} 
+                          />
+                        </div>
+                      </div>
+                    );
+                  });
+                })()}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -1,0 +1,66 @@
+/* Global App component styles */
+
+main {
+  flex-grow: 1;
+}
+
+/* WhatsApp Float Button */
+.whatsapp-float {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  width: 65px;
+  height: 65px;
+  background-color: #25d366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+  z-index: 999;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.whatsapp-pulse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #25d366;
+  border-radius: 50%;
+  z-index: -1;
+  animation: pulse 2s infinite;
+  opacity: 0.6;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  70% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .whatsapp-float {
+    bottom: 25px;
+    right: 25px;
+    width: 55px;
+    height: 55px;
+  }
+  
+  .whatsapp-float svg {
+    width: 24px;
+    height: 24px;
+  }
+}

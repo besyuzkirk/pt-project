@@ -185,7 +185,7 @@ function AssignPackageForm() {
       <div style={{ background: "white", border: "1px solid #e2e8f0", borderRadius: "20px", padding: "32px", boxShadow: "0 1px 3px rgba(0,0,0,0.04)", maxWidth: "800px" }}>
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
           
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+          <div className="form-grid-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
             <div>
               <label style={labelStyle}><Users size={12} style={{ display: "inline", marginRight: 4 }}/> Danışan</label>
               <select name="studentId" value={form.studentId} onChange={handleChange} style={{ ...inputStyle, opacity: preselectedStudentId ? 0.75 : 1, pointerEvents: preselectedStudentId ? "none" : "auto", background: preselectedStudentId ? "#e2e8f0" : "#f8fafc" }} required>
@@ -202,7 +202,7 @@ function AssignPackageForm() {
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+          <div className="form-grid-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
             <div>
               <label style={labelStyle}><Calendar size={12} style={{ display: "inline", marginRight: 4 }}/> Başlangıç Tarihi</label>
               <input type="date" name="startDate" value={form.startDate} onChange={handleChange} style={inputStyle} required />
@@ -231,7 +231,7 @@ function AssignPackageForm() {
             </div>
           )}
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+          <div className="form-grid-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
             <div>
               <label style={labelStyle}>Ödeme Yöntemi</label>
               <select name="paymentMethod" value={form.paymentMethod} onChange={handleChange} style={inputStyle} required>

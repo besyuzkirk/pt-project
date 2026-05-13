@@ -36,18 +36,21 @@ export default function LoginPage() {
     setError("");
     try {
       const response = await axios.post(`${API_BASE}/auth/verify-otp`, { phoneNumber, otpCode: otp });
-      const { accessToken, refreshToken, role, firstName, lastName } = response.data;
-
-      if (role === "Student") {
-        setError("Bu panele girmeye yetkiniz bulunmuyor. Sadece eğitmenler ve yöneticiler giriş yapabilir.");
-        return;
-      }
+      const { id, accessToken, refreshToken, role, firstName, lastName } = response.data;
 
       localStorage.setItem("token", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("userRole", role);
       localStorage.setItem("userName", `${firstName} ${lastName}`);
-      window.location.href = "/dashboard";
+      if (id) {
+        localStorage.setItem("userId", id);
+      }
+
+      if (role === "Student") {
+        window.location.href = "/student-dashboard";
+      } else {
+        window.location.href = "/dashboard";
+      }
     } catch (err: any) {
       setError("Hatalı kod.");
     } finally {
@@ -57,7 +60,7 @@ export default function LoginPage() {
 
   return (
     <main style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8fafc', padding: '24px' }}>
-      <div style={{ width: '100%', maxWidth: '440px', background: '#ffffff', borderRadius: '24px', padding: '48px', border: '1px solid #e2e8f0', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.05)' }}>
+      <div style={{ width: '100%', maxWidth: '440px', background: '#ffffff', borderRadius: '24px', padding: 'clamp(24px, 6vw, 48px)', border: '1px solid #e2e8f0', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.05)' }}>
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <div style={{ width: '64px', height: '64px', background: '#4f46e5', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px auto', boxShadow: '0 10px 15px -3px rgba(79, 70, 229, 0.4)' }}>
             <Lock style={{ color: 'white' }} size={32} />

@@ -33,6 +33,14 @@ public class AuthController : ControllerBase
     [Authorize(Roles = "Admin,Trainer")]
     public async Task<ActionResult<AuthResponseDto>> RegisterWithPhone(RegisterWithPhoneCommand command)
     {
+        var subClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value 
+                       ?? User.FindFirst(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Sub)?.Value;
+                       
+        if (Guid.TryParse(subClaim, out Guid parsedId))
+        {
+            command.CreatorTrainerId = parsedId;
+        }
+        
         return await _mediator.Send(command);
     }
 

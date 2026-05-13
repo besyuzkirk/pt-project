@@ -51,13 +51,11 @@ public class AssignPackageCommandHandler : IRequestHandler<AssignPackageCommand,
         if (student == null)
             throw new Exception("Danışan bulunamadı.");
 
-        // Check if student already has an active membership (ignoring empty dummy memberships)
-        var hasActiveMembership = await _context.Memberships
-            .AnyAsync(m => m.StudentId == request.StudentId && m.Status == MembershipStatus.Active && !string.IsNullOrEmpty(m.PackageName), cancellationToken);
 
-        if (hasActiveMembership)
-            throw new Exception("Bu danışanın zaten aktif bir paketi bulunuyor. Yeni paket atamadan önce mevcut paketi tamamlamalı veya iptal etmelisiniz.");
 
+        // Assign the trainer to the student
+        student.AssignedTrainerId = request.TrainerId;
+        _context.Users.Update(student);
 
         // 1. Create Membership
         var membership = new Membership
@@ -124,10 +122,11 @@ public class AssignPackageCommandHandler : IRequestHandler<AssignPackageCommand,
                     if (targetDate < request.StartDate) continue;
 
                     var scheduledAtLocal = targetDate.ToDateTime(TimeOnly.FromTimeSpan(schedule.Time));
-                    // Convert to UTC assuming local time context. In production, consider timezones properly.
-                    // For now, we assume standard local time without explicit timezone conversion mapping.
-                    // To avoid offset complexities in this demo, let's just use DateTimeOffset directly
-                    var scheduledAt = new DateTimeOffset(scheduledAtLocal, TimeSpan.Zero); // Or a specific offset
+                    // Fix: Use Turkey constant offset (+3) to map exact local hour correctly.
+                    var scheduledAt = new DateTimeOffset(scheduledAtLocal, TimeSpan.FromHours(3)).ToUniversalTime(); 
+
+                    // Fix: Ensure target appointment is not in the past relative to NOW
+                    if (scheduledAt < DateTimeOffset.UtcNow) continue;
 
                     var appointment = new Appointment
                     {

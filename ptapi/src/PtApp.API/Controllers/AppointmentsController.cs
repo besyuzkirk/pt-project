@@ -13,7 +13,7 @@ namespace PtApp.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Admin,Trainer")]
+[Authorize]
 public class AppointmentsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -24,6 +24,7 @@ public class AppointmentsController : ControllerBase
     }
 
     [HttpGet("calendar")]
+    [Authorize(Roles = "Admin,Trainer")]
     public async Task<ActionResult<List<AppointmentDto>>> GetCalendarAppointments(
         [FromQuery] DateTimeOffset startDate, 
         [FromQuery] DateTimeOffset endDate,
@@ -40,7 +41,29 @@ public class AppointmentsController : ControllerBase
         return await _mediator.Send(query);
     }
 
+    [HttpGet("my-sessions")]
+    public async Task<ActionResult<List<AppointmentDto>>> GetMySessions(
+        [FromQuery] DateTimeOffset startDate, 
+        [FromQuery] DateTimeOffset endDate)
+    {
+        var roleString = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+        if (roleString != "Student")
+        {
+            return Forbid();
+        }
+
+        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var studentId))
+        {
+            return Unauthorized("Kullanıcı kimliği alınamadı.");
+        }
+
+        var query = new GetStudentAppointmentsQuery(studentId, startDate, endDate);
+        return await _mediator.Send(query);
+    }
+
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin,Trainer")]
     public async Task<ActionResult> UpdateAppointment(Guid id, [FromBody] UpdateAppointmentRequest request)
     {
         var command = new UpdateAppointmentCommand(id, request.NewScheduledAt, request.NewStatus);
@@ -49,6 +72,7 @@ public class AppointmentsController : ControllerBase
     }
 
     [HttpPost("check-in")]
+    [Authorize(Roles = "Admin,Trainer")]
     public async Task<ActionResult<CheckInResultDto>> CheckIn([FromBody] CheckInRequest request)
     {
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

@@ -18,7 +18,12 @@ public record RegisterWithPhoneCommand(
     DateOnly? DateOfBirth = null,
     string? Notes = null,
     string? EmergencyContactName = null,
-    string? EmergencyContactPhone = null) : IRequest<AuthResponseDto>;
+    string? EmergencyContactPhone = null,
+    string? Email = null) : IRequest<AuthResponseDto>
+{
+    [System.Text.Json.Serialization.JsonIgnore]
+    public Guid? CreatorTrainerId { get; set; }
+}
 
 public class RegisterWithPhoneCommandHandler : IRequestHandler<RegisterWithPhoneCommand, AuthResponseDto>
 {
@@ -44,14 +49,22 @@ public class RegisterWithPhoneCommandHandler : IRequestHandler<RegisterWithPhone
             throw new Exception("Bu telefon numarası ile zaten bir kayıt mevcut.");
         }
 
+        Guid? assignedTrainerId = null;
+        if (request.Role == Role.Student)
+        {
+            // Auto-assign Creator's ID if request.TrainerId is empty/null
+            assignedTrainerId = request.TrainerId ?? request.CreatorTrainerId;
+        }
+
         var user = new AppUser
         {
             UserName = request.PhoneNumber,
             PhoneNumber = request.PhoneNumber,
             FirstName = request.FirstName,
             LastName = request.LastName,
+            Email = request.Email,
             Role = request.Role,
-            AssignedTrainerId = request.Role == Role.Student ? request.TrainerId : null,
+            AssignedTrainerId = assignedTrainerId,
             Gender = request.Gender,
             BloodType = request.BloodType,
             DateOfBirth = request.DateOfBirth,
@@ -81,9 +94,10 @@ public class RegisterWithPhoneCommandHandler : IRequestHandler<RegisterWithPhone
 
         return new AuthResponseDto
         {
+            Id = user.Id.ToString(),
             AccessToken = accessToken,
             RefreshToken = refreshToken,
-            PhoneNumber = user.PhoneNumber,
+            PhoneNumber = user.PhoneNumber ?? string.Empty,
             FirstName = user.FirstName,
             LastName = user.LastName,
             Role = user.Role.ToString()

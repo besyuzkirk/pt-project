@@ -109,7 +109,7 @@ export default function RegisterTrainerPage() {
         {/* Section: Temel Bilgiler */}
         <div style={{ marginBottom: "32px" }}>
           <h3 style={{ fontSize: "13px", fontWeight: 800, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "20px" }}>Temel Bilgiler</h3>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px 32px" }}>
+          <div className="form-grid-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px 32px" }}>
             <div>
               <label style={{ display: "block", fontSize: "12px", fontWeight: 800, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "8px" }}>Ad <span style={{ color: "#ef4444" }}>*</span></label>
               <input name="firstName" value={form.firstName} onChange={handleChange} type="text" placeholder="Örn: Ahmet" required style={{ width: "100%", height: "52px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "12px", padding: "0 16px", fontSize: "15px", outline: "none", color: "#0f172a", fontFamily: "inherit" }} />
@@ -132,7 +132,7 @@ export default function RegisterTrainerPage() {
         {/* Section: Acil Durum */}
         <div style={{ marginBottom: "32px" }}>
           <h3 style={{ fontSize: "13px", fontWeight: 800, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "20px" }}>Acil Durum İletişim</h3>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px 32px" }}>
+          <div className="form-grid-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px 32px" }}>
             <div>
               <label style={{ display: "block", fontSize: "12px", fontWeight: 800, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "8px" }}>Acil Durum Kişisi</label>
               <input name="emergencyContactName" value={form.emergencyContactName} onChange={handleChange} type="text" placeholder="Ad Soyad" style={{ width: "100%", height: "52px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "12px", padding: "0 16px", fontSize: "15px", outline: "none", color: "#0f172a", fontFamily: "inherit" }} />

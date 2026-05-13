@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PtApp.Application.Common.Interfaces;
 using PtApp.Domain.Enums;
+using PtApp.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,13 @@ public class TrainerLessonCountDto
     public int LessonCount { get; set; }
 }
 
+public class PaymentMethodBreakdownDto
+{
+    public decimal Cash { get; set; }
+    public decimal Card { get; set; }
+    public decimal Transfer { get; set; }
+}
+
 public class DashboardDataDto
 {
     public int ActiveMembersCount { get; set; }
@@ -43,6 +51,7 @@ public class DashboardDataDto
     public decimal MonthlyRevenue { get; set; }
     public decimal AllTimeRevenue { get; set; }
     public int PendingProgramsCount { get; set; }
+    public PaymentMethodBreakdownDto MonthlyPaymentBreakdown { get; set; } = new();
     public List<DashboardAppointmentDto> TodayAppointments { get; set; } = new();
     public List<DashboardWorkoutSessionDto> RecentCompletedSessions { get; set; } = new();
     public List<TrainerLessonCountDto> TrainerLessonCounts { get; set; } = new();
@@ -67,6 +76,7 @@ public class GetDashboardDataQueryHandler : IRequestHandler<GetDashboardDataQuer
         
         var todayStart = new DateTimeOffset(DateTime.Today).ToUniversalTime();
         var todayEnd = todayStart.AddDays(1);
+        var startOfMonthUtc = new DateTimeOffset(DateTime.Today.Year, DateTime.Today.Month, 1, 0, 0, 0, TimeSpan.Zero);
 
         // 1. Active Members Count
         if (request.IsAdmin)
@@ -95,27 +105,36 @@ public class GetDashboardDataQueryHandler : IRequestHandler<GetDashboardDataQuer
                 .CountAsync(s => s.CreatedById == request.TrainerId.Value && s.Date >= startOfMonth && s.Status == SessionStatus.Completed && !s.IsDeleted, cancellationToken);
         }
 
-        // 3. Revenues (Monthly & All-Time)
-        if (request.IsAdmin)
-        {
-            result.MonthlyRevenue = await _context.Memberships
-                .Where(m => m.StartDate >= startOfMonth && !m.IsDeleted)
-                .SumAsync(m => (decimal?)m.Price, cancellationToken) ?? 0m;
+        // 3. Revenues (Monthly & All-Time from PAID payments only)
+        IQueryable<Payment> paymentsQueryBase = _context.Payments
+            .Include(p => p.Membership)
+            .Where(p => p.Status == PaymentStatus.Paid && !p.IsDeleted);
 
-            result.AllTimeRevenue = await _context.Memberships
-                .Where(m => !m.IsDeleted)
-                .SumAsync(m => (decimal?)m.Price, cancellationToken) ?? 0m;
-        }
-        else if (request.TrainerId.HasValue)
+        if (!request.IsAdmin && request.TrainerId.HasValue)
         {
-            result.MonthlyRevenue = await _context.Memberships
-                .Where(m => m.TrainerId == request.TrainerId.Value && m.StartDate >= startOfMonth && !m.IsDeleted)
-                .SumAsync(m => (decimal?)m.Price, cancellationToken) ?? 0m;
-
-            result.AllTimeRevenue = await _context.Memberships
-                .Where(m => m.TrainerId == request.TrainerId.Value && !m.IsDeleted)
-                .SumAsync(m => (decimal?)m.Price, cancellationToken) ?? 0m;
+            paymentsQueryBase = paymentsQueryBase.Where(p => p.Membership.TrainerId == request.TrainerId.Value);
         }
+
+        result.MonthlyRevenue = await paymentsQueryBase
+            .Where(p => p.PaidAt >= startOfMonthUtc)
+            .SumAsync(p => (decimal?)p.Amount, cancellationToken) ?? 0m;
+
+        result.AllTimeRevenue = await paymentsQueryBase
+            .SumAsync(p => (decimal?)p.Amount, cancellationToken) ?? 0m;
+
+        // Monthly breakdown by Payment Method
+        var monthlyPayments = await paymentsQueryBase
+            .Where(p => p.PaidAt >= startOfMonthUtc)
+            .GroupBy(p => p.PaymentMethod)
+            .Select(g => new { Method = g.Key, Total = g.Sum(p => p.Amount) })
+            .ToListAsync(cancellationToken);
+
+        result.MonthlyPaymentBreakdown = new PaymentMethodBreakdownDto
+        {
+            Cash = monthlyPayments.FirstOrDefault(x => x.Method == PaymentMethod.Cash)?.Total ?? 0m,
+            Card = monthlyPayments.FirstOrDefault(x => x.Method == PaymentMethod.Card)?.Total ?? 0m,
+            Transfer = monthlyPayments.FirstOrDefault(x => x.Method == PaymentMethod.Transfer)?.Total ?? 0m
+        };
 
         // 4. Pending Programs Count (Active members with no completed sessions yet)
         if (request.IsAdmin)

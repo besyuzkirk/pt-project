@@ -45,6 +45,19 @@ public class StudentMeasurementDto
     public string? BackPhotoUrl { get; set; }
 }
 
+public class StudentWorkoutSessionDto
+{
+    public Guid Id { get; set; }
+    public DateTimeOffset? StartedAt { get; set; }
+    public int? DurationMinutes { get; set; }
+    public string TrainerName { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
+    public string? Notes { get; set; }
+    public string? PackageName { get; set; }
+    public int? TotalSessions { get; set; }
+    public int? UsedSessions { get; set; }
+}
+
 public class StudentProfileDto
 {
     public Guid Id { get; set; }
@@ -60,11 +73,13 @@ public class StudentProfileDto
     public string? EmergencyContactPhone { get; set; }
     public string? Notes { get; set; }
     public Guid? AssignedTrainerId { get; set; }
+    public string? AssignedTrainerName { get; set; }
     public DateTimeOffset? LastLoginAt { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
 
     public List<StudentMembershipDto> Memberships { get; set; } = new();
     public List<StudentMeasurementDto> Measurements { get; set; } = new();
+    public List<StudentWorkoutSessionDto> WorkoutSessions { get; set; } = new();
 }
 
 public record GetStudentProfileQuery(Guid StudentId) : IRequest<StudentProfileDto>;
@@ -81,9 +96,14 @@ public class GetStudentProfileQueryHandler : IRequestHandler<GetStudentProfileQu
     public async Task<StudentProfileDto> Handle(GetStudentProfileQuery request, CancellationToken cancellationToken)
     {
         var student = await _context.Users
+            .Include(u => u.AssignedTrainer)
             .Include(u => u.MembershipsAsStudent)
                 .ThenInclude(m => m.Trainer)
             .Include(u => u.BodyMeasurementsAsStudent)
+            .Include(u => u.WorkoutSessionsAsStudent)
+                .ThenInclude(w => w.Creator)
+            .Include(u => u.WorkoutSessionsAsStudent)
+                .ThenInclude(w => w.Membership)
             .FirstOrDefaultAsync(u => u.Id == request.StudentId && !u.IsDeleted && u.Role == Role.Student, cancellationToken);
 
         if (student == null)
@@ -104,6 +124,7 @@ public class GetStudentProfileQueryHandler : IRequestHandler<GetStudentProfileQu
             EmergencyContactPhone = student.EmergencyContactPhone,
             Notes = student.Notes,
             AssignedTrainerId = student.AssignedTrainerId,
+            AssignedTrainerName = student.AssignedTrainer != null ? $"{student.AssignedTrainer.FirstName} {student.AssignedTrainer.LastName}" : null,
             LastLoginAt = student.LastLoginAt,
             CreatedAt = student.CreatedAt,
             Memberships = student.MembershipsAsStudent
@@ -140,6 +161,18 @@ public class GetStudentProfileQueryHandler : IRequestHandler<GetStudentProfileQu
                 FrontPhotoUrl = m.FrontPhotoUrl,
                 SidePhotoUrl = m.SidePhotoUrl,
                 BackPhotoUrl = m.BackPhotoUrl
+            }).ToList(),
+            WorkoutSessions = student.WorkoutSessionsAsStudent.OrderByDescending(w => w.StartedAt).Select(w => new StudentWorkoutSessionDto
+            {
+                Id = w.Id,
+                StartedAt = w.StartedAt,
+                DurationMinutes = w.DurationMinutes,
+                TrainerName = w.Creator != null ? $"{w.Creator.FirstName} {w.Creator.LastName}" : "Bilinmiyor",
+                Status = w.Status.ToString(),
+                Notes = w.Notes,
+                PackageName = w.Membership != null ? w.Membership.PackageName : "Serbest Giriş",
+                TotalSessions = w.Membership != null ? w.Membership.TotalSessions : null,
+                UsedSessions = w.Membership != null ? w.Membership.UsedSessions : null
             }).ToList()
         };
     }

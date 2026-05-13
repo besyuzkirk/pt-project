@@ -19,6 +19,7 @@ export default function RegisterStudentPage() {
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
+    email: "",
     phoneNumber: "",
     dateOfBirth: "",
     gender: "",
@@ -76,6 +77,7 @@ export default function RegisterStudentPage() {
           phoneNumber: form.phoneNumber,
           firstName: form.firstName,
           lastName: form.lastName,
+          email: form.email || null,
           role: 2, // Role.Student = 2
           trainerId: assignedTrainerId,
           gender: form.gender !== "" ? parseInt(form.gender) : null,
@@ -88,7 +90,7 @@ export default function RegisterStudentPage() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setSuccessName(`${form.firstName} ${form.lastName}`);
-      setForm({ firstName: "", lastName: "", phoneNumber: "", dateOfBirth: "", gender: "", bloodType: "", notes: "", emergencyContactName: "", emergencyContactPhone: "", selectedTrainerId: "", assignToMe: true });
+      setForm({ firstName: "", lastName: "", email: "", phoneNumber: "", dateOfBirth: "", gender: "", bloodType: "", notes: "", emergencyContactName: "", emergencyContactPhone: "", selectedTrainerId: "", assignToMe: true });
 
     } catch (err: any) {
       const msg = err.response?.data?.message || err.response?.data || "Kayıt sırasında bir hata oluştu.";
@@ -210,7 +212,7 @@ export default function RegisterStudentPage() {
       )}
 
       {/* Form Card */}
-      <form onSubmit={handleSubmit} style={{ background: "white", border: "1px solid #e2e8f0", borderRadius: "20px", padding: "40px", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
+      <form onSubmit={handleSubmit} className="form-card" style={{ background: "white", border: "1px solid #e2e8f0", borderRadius: "20px", padding: "40px", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
         
         {/* Info Box */}
         <div style={{ display: "flex", alignItems: "center", gap: "16px", background: isAdmin ? "#eff6ff" : "#f0fdf4", border: isAdmin ? "1px solid #dbeafe" : "1px solid #bbf7d0", borderRadius: "14px", padding: "16px 20px", marginBottom: "36px" }}>
@@ -225,7 +227,7 @@ export default function RegisterStudentPage() {
         {/* Temel Bilgiler */}
         <div style={{ marginBottom: "32px" }}>
           <h3 style={{ fontSize: "13px", fontWeight: 800, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "20px", paddingBottom: "12px", borderBottom: "1px solid #f1f5f9" }}>Temel Bilgiler</h3>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px 32px" }}>
+          <div className="form-grid-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px 32px" }}>
             <div>
               <label style={labelStyle}>Ad <span style={{ color: "#ef4444" }}>*</span></label>
               <input name="firstName" value={form.firstName} onChange={handleChange} type="text" placeholder="Örn: Caner" required style={inputStyle} />
@@ -233,6 +235,10 @@ export default function RegisterStudentPage() {
             <div>
               <label style={labelStyle}>Soyad <span style={{ color: "#ef4444" }}>*</span></label>
               <input name="lastName" value={form.lastName} onChange={handleChange} type="text" placeholder="Örn: Yıldız" required style={inputStyle} />
+            </div>
+            <div>
+              <label style={labelStyle}>E-Posta</label>
+              <input name="email" value={form.email} onChange={handleChange} type="email" placeholder="Örn: caner@email.com" style={inputStyle} />
             </div>
             <div>
               <label style={labelStyle}>Telefon Numarası <span style={{ color: "#ef4444" }}>*</span></label>
@@ -293,7 +299,7 @@ export default function RegisterStudentPage() {
         {/* Acil Durum */}
         <div style={{ marginBottom: "32px" }}>
           <h3 style={{ fontSize: "13px", fontWeight: 800, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "20px", paddingBottom: "12px", borderBottom: "1px solid #f1f5f9" }}>Acil Durum İletişim</h3>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px 32px" }}>
+          <div className="form-grid-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px 32px" }}>
             <div>
               <label style={labelStyle}>Acil Durum Kişisi</label>
               <input name="emergencyContactName" value={form.emergencyContactName} onChange={handleChange} type="text" placeholder="Ad Soyad" style={inputStyle} />

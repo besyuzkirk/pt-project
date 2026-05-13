@@ -15,6 +15,8 @@ public class AppointmentDto
     public Guid StudentId { get; set; }
     public string StudentName { get; set; } = string.Empty;
     public string PackageName { get; set; } = string.Empty;
+    public Guid TrainerId { get; set; }
+    public string TrainerName { get; set; } = string.Empty;
     public DateTimeOffset ScheduledAt { get; set; }
     public int DurationMinutes { get; set; }
     public string Status { get; set; } = string.Empty;
@@ -42,6 +44,7 @@ public class GetAppointmentsQueryHandler : IRequestHandler<GetAppointmentsQuery,
             .Include(a => a.Attendees)
             .ThenInclude(att => att.Student)
             .Include(a => a.Membership)
+            .Include(a => a.Trainer)
             .Where(a => !a.IsDeleted)
             .Where(a => a.ScheduledAt >= request.StartDate && a.ScheduledAt <= request.EndDate);
 
@@ -61,6 +64,8 @@ public class GetAppointmentsQueryHandler : IRequestHandler<GetAppointmentsQuery,
                 Id = a.Id,
                 StudentId = student?.Id ?? Guid.Empty,
                 StudentName = student != null ? $"{student.FirstName} {student.LastName}" : "Bilinmiyor",
+                TrainerId = a.TrainerId,
+                TrainerName = a.Trainer != null ? $"{a.Trainer.FirstName} {a.Trainer.LastName}" : "Bilinmiyor",
                 PackageName = a.Membership?.PackageName ?? "Bilinmeyen Paket",
                 ScheduledAt = a.ScheduledAt,
                 DurationMinutes = a.DurationMinutes,

@@ -1,0 +1,139 @@
+.gallery-section {
+  background-color: var(--bg-secondary);
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+}
+
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.gallery-item.large {
+  grid-column: span 7;
+}
+
+.gallery-item.small {
+  grid-column: span 5;
+}
+
+/* Stagger the arrangement on alternating rows */
+.gallery-item:nth-child(3) {
+  grid-column: span 5;
+}
+
+.gallery-item:nth-child(4) {
+  grid-column: span 7;
+}
+
+.gallery-img-wrapper {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+}
+
+.gallery-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.gallery-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, rgba(5, 5, 5, 0.9) 0%, rgba(5, 5, 5, 0.2) 50%, transparent 100%);
+  opacity: 0.8;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem;
+  transition: all 0.4s ease;
+}
+
+.gallery-tag {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-red);
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  transform: translateY(10px);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+.gallery-item-title {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  transform: translateY(10px);
+  transition: all 0.4s ease 0.05s;
+}
+
+/* Hover states */
+.gallery-item:hover .gallery-img {
+  transform: scale(1.08);
+}
+
+.gallery-item:hover .gallery-overlay {
+  opacity: 1;
+  background: linear-gradient(
+    to top, 
+    rgba(var(--accent-red-rgb), 0.4) 0%, 
+    rgba(5, 5, 5, 0.4) 50%, 
+    transparent 100%
+  );
+}
+
+.gallery-item:hover .gallery-tag,
+.gallery-item:hover .gallery-item-title {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Smooth fallback for elements always showing titles slightly, but animates more on hover */
+.gallery-item-title {
+  opacity: 0.9;
+  transform: translateY(0);
+}
+
+@media (max-width: 992px) {
+  .gallery-item.large,
+  .gallery-item.small,
+  .gallery-item:nth-child(3),
+  .gallery-item:nth-child(4) {
+    grid-column: span 6;
+  }
+  
+  .gallery-img-wrapper {
+    height: 300px;
+  }
+}
+
+@media (max-width: 600px) {
+  .gallery-item.large,
+  .gallery-item.small,
+  .gallery-item:nth-child(3),
+  .gallery-item:nth-child(4) {
+    grid-column: span 12;
+  }
+  
+  .gallery-img-wrapper {
+    height: 250px;
+  }
+  
+  .gallery-tag {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

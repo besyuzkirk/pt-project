@@ -109,10 +109,10 @@ export default function PackagesPage() {
   return (
     <div>
       {/* Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "40px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "clamp(20px, 4vw, 40px)", flexWrap: "wrap", gap: "12px" }}>
         <div>
-          <h1 style={{ fontSize: "32px", fontWeight: 900, color: "#0f172a", letterSpacing: "-1px", marginBottom: "8px" }}>Paket Yönetimi</h1>
-          <p style={{ fontSize: "16px", color: "#64748b", fontWeight: 500 }}>
+          <h1 style={{ fontSize: "clamp(22px, 5vw, 32px)", fontWeight: 900, color: "#0f172a", letterSpacing: "-1px", marginBottom: "8px" }}>Paket Yönetimi</h1>
+          <p style={{ fontSize: "clamp(13px, 2.5vw, 16px)", color: "#64748b", fontWeight: 500 }}>
             Eğitim paketleri oluşturun ve yönetin
           </p>
         </div>
@@ -143,7 +143,7 @@ export default function PackagesPage() {
           </button>
         </div>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "20px" }}>
           {packages.map((pkg) => (
             <div key={pkg.id} style={{ background: "white", border: "1px solid #e2e8f0", borderRadius: "20px", padding: "28px", boxShadow: "0 1px 3px rgba(0,0,0,0.04)", display: "flex", flexDirection: "column", gap: "16px" }}>
               {/* Card Header */}
@@ -241,7 +241,7 @@ export default function PackagesPage() {
                 </div>
 
                 {/* Tür Seçimleri */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                <div className="form-grid-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
                   <div>
                     <label style={labelStyle}>Paket Tipi <span style={{ color: "#ef4444" }}>*</span></label>
                     <select name="packageType" value={form.packageType} onChange={handleChange} style={{ ...inputStyle, cursor: "pointer" }}>
@@ -267,7 +267,7 @@ export default function PackagesPage() {
                 )}
 
                 {/* Sayısal Alanlar */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                <div className="form-grid-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
                   <div>
                     <label style={labelStyle}>Toplam Seans Sayısı</label>
                     <input name="totalSessions" value={form.totalSessions} onChange={handleChange} type="number" min="1" placeholder="Boş = sınırsız" style={inputStyle} />
